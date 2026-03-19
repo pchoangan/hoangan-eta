@@ -31,33 +31,13 @@ export default function Table() {
   // --- 2. EFFECTS ---
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('/api/google-sheets');
-        
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const dataSheet = await response.json();
-        if (dataSheet && dataSheet.length > 0) {
-          setData(dataSheet);
-          setHeader(dataSheet[0]);
-        } else {
-          // Nếu API trả về mảng rỗng, dùng dữ liệu mặc định
-          setData(defaultData);
-          setHeader(defaultData[0]);
-        }
-      } catch (error) {
-        console.error("Lỗi fetch hoặc API không tồn tại, sử dụng dữ liệu mặc định:", error);
-        // Fallback: Sử dụng dữ liệu mặc định khi có lỗi
-        setData(defaultData);
-        setHeader(defaultData[0]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    const response = await fetch('/api/google-sheets');
+    const dataSheet = await response.json();
+    setData(dataSheet);
+    setHeader(dataSheet[0]);
+    setLoading(false);
+  }
+  fetchData(); 
 
     const savedErrorRow = localStorage.getItem("errorRowState");
     if (savedErrorRow) {
